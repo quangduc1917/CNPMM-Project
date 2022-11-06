@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 public class CommentSection {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cmtId;
 
     @Column

@@ -63,13 +63,14 @@ public class ReviewServiceImpl implements ReviewService {
 
 
     @Override
-    public Page<ReviewResponse> getAll(int limit, int offset, long productId) {
+    public Page<ReviewResponse> getAll(int offset, int limit, long productId) {
         PageRequest pageRequest = PageRequest.of(offset,limit);
         Page<ReviewSection> reviewSections = reviewSectionRepository.findAll(new Specification<ReviewSection>(){
             @Override
             public Predicate toPredicate(Root<ReviewSection> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
                 Predicate p = criteriaBuilder.conjunction();
-                Predicate predicateProduct = criteriaBuilder.equal(root.join("product").get("productId"),productId);
+                Predicate predicateProduct = criteriaBuilder.equal(root.join("productReview").get("productId"),productId);
+                p = criteriaBuilder.and(p,predicateProduct);
                 query.orderBy(criteriaBuilder.desc(root.get("reviewId")));
                 return p;
             }
@@ -83,5 +84,10 @@ public class ReviewServiceImpl implements ReviewService {
 
             return reviewResponse;
         });
+    }
+    @Override
+    public long countReview(long productId) {
+        long nCountReview = reviewSectionRepository.findAll().stream().filter( t -> t.getProductReview().getProductId() == productId ).count();
+        return nCountReview;
     }
 }

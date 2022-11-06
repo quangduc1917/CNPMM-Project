@@ -19,5 +19,5 @@ public class ProductResponse {
     private String imageThree;
     private String imageFour;
     private String nameBrand;
-
+    private long reviewer;
 }

@@ -10,4 +10,5 @@ public interface ReviewService {
     void insertReview(HttpServletRequest request, long productId, ReviewSectionRequest reviewSectionRequest);
 
     Page<ReviewResponse> getAll( int offset, int limit, long productId);
+    long countReview(long productId);
 }
