@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @AllArgsConstructor
 public class CommentController {
-    private final CommentService commentService;
+    private final CommentService commentService;//check
 
     @PostMapping("/api/comment/add")
     @PreAuthorize("hasAnyRole('USER') OR hasAnyRole('ADMIN')")
