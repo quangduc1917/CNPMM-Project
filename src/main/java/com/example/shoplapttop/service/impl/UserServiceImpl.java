@@ -4,6 +4,7 @@ import com.example.shoplapttop.entity.User;
 import com.example.shoplapttop.exception.ResourceNotFoundException;
 import com.example.shoplapttop.mapper.user.UserDetailResponseMapper;
 import com.example.shoplapttop.model.request.user.PasswordRequest;
+import com.example.shoplapttop.model.request.user.ResetPasswordRequest;
 import com.example.shoplapttop.model.request.user.UserUpdateRequest;
 import com.example.shoplapttop.model.response.user.UserDetailResponse;
 import com.example.shoplapttop.repository.UserRepository;
@@ -145,6 +146,20 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         return "SUCCESS";
+    }
+
+    @Override
+    public String resetPassword(ResetPasswordRequest resetPasswordRequest) {
+
+        String message = "";
+        Optional<User> findUser = userRepository.findByEmail(resetPasswordRequest.getEmail());
+        User user = findUser.get();
+        int code = (int) Math.floor(((Math.random() * 899999) + 100000));
+        String resetPassword = String.valueOf(code);
+        user.setPassword(passwordEncoder.encode(resetPassword));
+        userRepository.save(user);
+        System.out.println(code);
+        return  resetPassword;
     }
 
 }

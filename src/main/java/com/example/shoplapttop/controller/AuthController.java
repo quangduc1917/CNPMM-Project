@@ -5,12 +5,15 @@ import com.example.shoplapttop.entity.RoleName;
 import com.example.shoplapttop.entity.User;
 import com.example.shoplapttop.exception.AppException;
 import com.example.shoplapttop.model.request.user.LoginRequest;
+import com.example.shoplapttop.model.request.user.ResetPasswordRequest;
 import com.example.shoplapttop.model.request.user.SignUpRequest;
 import com.example.shoplapttop.model.response.ApiResponse;
 import com.example.shoplapttop.model.response.JwtAuthenticationResponse;
 import com.example.shoplapttop.repository.RoleRepository;
 import com.example.shoplapttop.repository.UserRepository;
 import com.example.shoplapttop.security.JwtTokenProvider;
+import com.example.shoplapttop.service.UserService;
+import com.example.shoplapttop.utils.EmailServiceImpl;
 import com.example.shoplapttop.utils.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,6 +50,10 @@ public class AuthController {
 
     @Autowired
     JwtTokenProvider tokenProvider;
+    @Autowired
+    UserService userService;
+    @Autowired
+    EmailServiceImpl emailService;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser( @RequestBody LoginRequest loginRequest) {
@@ -100,5 +107,18 @@ public class AuthController {
         return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
     }
 
+
+    @PostMapping("/reset")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest reset) {
+        if(!userRepository.existsByEmail(reset.getEmail())) {
+            return new ResponseEntity(new ApiResponse(false, "Email not exist"),
+                    HttpStatus.BAD_REQUEST);
+        }
+        String message = userService.resetPassword(reset);
+        emailService.sendSimpleEmail(reset.getEmail(), "MK",message);
+        System.out.println(reset.getEmail());
+        return new ResponseEntity(new ApiResponse(true, "ok!"),
+                HttpStatus.OK);
+    }
 
 }
