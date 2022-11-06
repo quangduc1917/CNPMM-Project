@@ -37,22 +37,27 @@ public class CartServiceImpl implements CartService {
         Optional<Product> resultProduct = productRepository.findById(productId);
         resultProduct.orElseThrow(()->new ResourceNotFoundException("Id not found!","ID", productId));
 
-        Cart findProductInCart = cartRepository.findByProductCart(resultProduct.get());
+        try {
 
-        if (findProductInCart != null && findProductInCart.getState() == 0){
-            int i = findProductInCart.getCartAmount();
-            Cart cart = findProductInCart;
-            cart.setCartAmount(++i);
-            cartRepository.save(cart);
+            Cart findProductInCart = cartRepository.findByProductCart(resultProduct.get());
 
-        }else{
-            Cart cart = new Cart();
-            cart.setCartAmount(amountItem);
-            cart.setState(0);
-            cart.setUserCart(findUser.get());
-            cart.setProductCart(resultProduct.get());
+            if (findProductInCart != null && findProductInCart.getState() == 0) {
+                int i = findProductInCart.getCartAmount();
+                Cart cart = findProductInCart;
+                cart.setCartAmount(i+amountItem);
+                cartRepository.save(cart);
 
-            cartRepository.save(cart);
+            } else {
+                Cart cart = new Cart();
+                cart.setCartAmount(amountItem);
+                cart.setState(0);
+                cart.setUserCart(findUser.get());
+                cart.setProductCart(resultProduct.get());
+
+                cartRepository.save(cart);
+            }
+        }catch (Throwable ex){
+
         }
 
     }

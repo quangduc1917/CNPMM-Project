@@ -19,17 +19,19 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping("/api/review/add")
+    @PostMapping("/api/review/add/{productId}")
     @PreAuthorize("hasAnyRole('USER') OR hasAnyRole('ADMIN')")
-    public ResponseEntity<?> reviewProduct(HttpServletRequest request, @RequestParam long productId,@RequestBody ReviewSectionRequest reviewSectionRequest){
-        reviewService.insertReview(request,productId,reviewSectionRequest);
+    public ResponseEntity<?> reviewProduct(HttpServletRequest request, @PathVariable long productId,@RequestBody ReviewSectionRequest reviewSectionRequest){        reviewService.insertReview(request,productId,reviewSectionRequest);
         return new ResponseEntity(new ApiResponse(true,"SUCCESS"), HttpStatus.OK);
     }
 
     @GetMapping("/api/public/review/all")
-    public ResponseEntity<Page<ReviewResponse>> getAllReviews(@RequestParam int offset, @RequestParam int limit, @RequestParam long productId){
-        return new ResponseEntity<>(reviewService.getAll(offset, limit, productId),HttpStatus.OK);
+    public ResponseEntity<Page<ReviewResponse>> getAllReviews(@RequestParam(required = false) int offset, @RequestParam(required = false) int limit, @RequestParam(required = false) long productId){        return new ResponseEntity<>(reviewService.getAll(offset, limit, productId),HttpStatus.OK);
     }
 
+    @GetMapping("/api/public/review/count/{productId}")
+    public long getCountReview(@PathVariable long productId){
+        return reviewService.countReview(productId);
+    }
 
 }

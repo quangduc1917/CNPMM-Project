@@ -11,6 +11,7 @@ import com.example.shoplapttop.repository.BrandRepository;
 import com.example.shoplapttop.repository.ProductRepository;
 import com.example.shoplapttop.service.FileStorageService;
 import com.example.shoplapttop.service.ProductService;
+import com.example.shoplapttop.service.ReviewService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,6 +35,7 @@ public class ProductServiceImpl implements ProductService {
     private final BrandRepository brandRepository;
     private FileStorageService fileStorageService;
     private final ProductResponseMapper productResponseMapper;
+    private final ReviewService reviewService;
 
     @Override
     public void insertProduct(ProductRequest productRequest) {
@@ -151,6 +153,7 @@ public class ProductServiceImpl implements ProductService {
 
         return products.map(t->{
            ProductResponse productResponse = productResponseMapper.to(t);
+           productResponse.setReviewer(reviewService.countReview(t.getProductId()));
            productResponse.setNameBrand(t.getBrand().getBrandName());
            return productResponse;
         });

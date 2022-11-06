@@ -5,5 +5,4 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface CommentSectionRepository extends JpaRepository<CommentSection,Long>, JpaSpecificationExecutor<CommentSection> {
-}
+public interface CommentSectionRepository extends JpaRepository<CommentSection,Long> , JpaSpecificationExecutor<CommentSection> {}

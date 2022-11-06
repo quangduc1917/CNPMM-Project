@@ -69,7 +69,8 @@ public class CommentServiceImpl implements CommentService {
             @Override
             public Predicate toPredicate(Root<CommentSection> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
                 Predicate p = criteriaBuilder.conjunction();
-                Predicate predicateProduct = criteriaBuilder.equal(root.join("product").get("productId"),productId);
+                Predicate predicateProduct = criteriaBuilder.equal(root.join("productComment").get("productId"),productId);
+                p = criteriaBuilder.and(p,predicateProduct);
                 query.orderBy(criteriaBuilder.desc(root.get("cmtId")));
                 return p;
             }

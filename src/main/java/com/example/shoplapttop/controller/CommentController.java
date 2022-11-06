@@ -19,16 +19,14 @@ import javax.servlet.http.HttpServletRequest;
 public class CommentController {
     private final CommentService commentService;//check
 
-    @PostMapping("/api/comment/add")
+    @PostMapping("/api/comment/add/{productId}")
     @PreAuthorize("hasAnyRole('USER') OR hasAnyRole('ADMIN')")
-    public ResponseEntity<?> commentProduct(HttpServletRequest request, @RequestParam long productId, @RequestBody CommentSaveRequest commentSaveRequest){
-        commentService.insertComment(request, productId, commentSaveRequest);
+    public ResponseEntity<?> commentProduct(HttpServletRequest request, @PathVariable long productId, @RequestBody CommentSaveRequest commentSaveRequest){        commentService.insertComment(request, productId, commentSaveRequest);
         return new ResponseEntity(new ApiResponse(true,"SUCCESS"), HttpStatus.OK);
     }
 
     @GetMapping("/api/public/comment/all")
-    public ResponseEntity<Page<CommentResponse>> getAllComments(@RequestParam int offset, @RequestParam int limit, @RequestParam long productId){
-        return new ResponseEntity<>(commentService.getAllComment(offset, limit, productId),HttpStatus.OK);
+    public ResponseEntity<Page<CommentResponse>> getAllComments(@RequestParam(required = false) int offset, @RequestParam(required = false) int limit, @RequestParam(required = false) long productId){        return new ResponseEntity<>(commentService.getAllComment(offset, limit, productId),HttpStatus.OK);
     }
 
 }
