@@ -1,6 +1,7 @@
 package com.example.shoplapttop.service;
 
 import com.example.shoplapttop.model.request.user.PasswordRequest;
+import com.example.shoplapttop.model.request.user.ResetPasswordRequest;
 import com.example.shoplapttop.model.request.user.UserUpdateRequest;
 import com.example.shoplapttop.model.response.user.UserDetailResponse;
 import org.springframework.data.domain.Page;
@@ -23,4 +24,5 @@ public interface UserService {
     Page<UserDetailResponse> getAllUser( int offset, int limit, String email, String numberPhone, String userName);
 
     String updateImgUser(HttpServletRequest request, MultipartFile file);
+    String resetPassword( ResetPasswordRequest resetPasswordRequest);
 }
