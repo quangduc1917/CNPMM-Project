@@ -10,6 +10,7 @@ import com.example.shoplapttop.repository.ProductRepository;
 import com.example.shoplapttop.repository.UserRepository;
 import com.example.shoplapttop.security.JwtTokenProvider;
 import com.example.shoplapttop.service.CartService;
+import com.example.shoplapttop.service.ProductService;
 import com.example.shoplapttop.utils.JwtUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ public class CartServiceImpl implements CartService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final ProductService productService;
 
     @Override
     public void insertItem(HttpServletRequest request, long productId, int amountItem) {
@@ -128,7 +131,10 @@ public class CartServiceImpl implements CartService {
     public void checkOut(long cartId) {
         Cart cart = cartRepository.findById(cartId).get();
         cart.setState(1);
+//        Optional<Product> p=productService.findById(cart.getProductCart().getProductId());
+//        p.set
         cartRepository.save(cart);
+
     }
 
 

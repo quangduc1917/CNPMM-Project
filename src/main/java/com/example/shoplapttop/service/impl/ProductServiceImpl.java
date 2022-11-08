@@ -160,5 +160,10 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+//    @Override
+//    public Optional<Product> findById(Long productId) {
+//        return productRepository.findById(productId);
+//    }
+
 
 }

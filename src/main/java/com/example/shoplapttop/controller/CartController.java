@@ -1,8 +1,11 @@
 package com.example.shoplapttop.controller;
 
+import com.example.shoplapttop.model.request.order.OrderRequest;
 import com.example.shoplapttop.model.response.ApiResponse;
 import com.example.shoplapttop.model.response.cart.CartResponse;
 import com.example.shoplapttop.service.CartService;
+import com.example.shoplapttop.service.OrderService;
+import com.example.shoplapttop.service.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,8 @@ import java.util.List;
 public class CartController {
 
     private final CartService cartService;
+
+    private final OrderService orderService;
 
     @PostMapping("/addItem")
     @PreAuthorize("hasAnyRole('USER') OR hasAnyRole('ADMIN')")
@@ -59,6 +64,14 @@ public class CartController {
         return new ResponseEntity(new ApiResponse(true,"SUCCESS"), HttpStatus.OK);
     }
 
+
+    @PostMapping("/checkout1")
+    @PreAuthorize("hasAnyRole('USER') OR hasAnyRole('ADMIN')")
+    public ResponseEntity<?> check(HttpServletRequest request,@RequestBody OrderRequest order){
+        orderService.insertOrder(request,order.getOrderName(),order.getOrderTotal());
+        System.out.println(order.getOrderTotal());
+        return new ResponseEntity(new ApiResponse(true,"Insert success"), HttpStatus.OK);
+    }
 
 
 

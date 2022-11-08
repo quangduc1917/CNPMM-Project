@@ -1,9 +1,12 @@
 package com.example.shoplapttop.service;
 
+import com.example.shoplapttop.entity.Product;
 import com.example.shoplapttop.model.request.product.ProductRequest;
 import com.example.shoplapttop.model.response.product.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Optional;
 
 public interface ProductService {
     void insertProduct(ProductRequest productRequest);
@@ -19,4 +22,5 @@ public interface ProductService {
     Page<ProductResponse> getAllProduct(int offset, int limit, String nameProduct, String nameBrand, Integer sort, Long brandId);
 
 
+//    Optional<Product> findById(Long productId);
 }
