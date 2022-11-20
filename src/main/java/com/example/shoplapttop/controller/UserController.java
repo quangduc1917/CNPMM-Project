@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/api/user")
+    @RequestMapping("/api/user")
 @AllArgsConstructor
 public class UserController {
 

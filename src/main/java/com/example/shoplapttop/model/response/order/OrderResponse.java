@@ -14,5 +14,6 @@ public class OrderResponse {
     private String date;
     private String codeOrder;
     private String address;
+    private String orderInfor;
 
 }

@@ -72,11 +72,22 @@ public class CartServiceImpl implements CartService {
 
         Optional<User> findUser = userRepository.findById(userId);
 
+
+
         Cart cart = cartRepository.findById(cartId).get();
+
+        Product p = cart.getProductCart();
+        if(amountItem>p.getAmount())
+        {
+            System.out.println("ko đủ số lượng");
+        }
+
+
         Cart newCart = cart;
         newCart.setCartAmount(amountItem);
 
         cartRepository.save(newCart);
+
     }
 
     @Override
@@ -114,6 +125,9 @@ public class CartServiceImpl implements CartService {
         return cartResponses;
     }
 
+
+
+
     @Override
     public int countItem(HttpServletRequest request) {
         String token = JwtUtil.getToken(request);
@@ -130,6 +144,14 @@ public class CartServiceImpl implements CartService {
     @Override
     public void checkOut(long cartId) {
         Cart cart = cartRepository.findById(cartId).get();
+        cart.setState(1);
+
+
+        Product p = cart.getProductCart();
+        p.setAmount(p.getAmount()-cart.getCartAmount());
+
+        productRepository.save(p);
+
         cart.setState(1);
 //        Optional<Product> p=productService.findById(cart.getProductCart().getProductId());
 //        p.set

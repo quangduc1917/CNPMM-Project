@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface OrderService {
-    void insertOrder(HttpServletRequest request, String orderName,Long orderTotal);
+    void insertOrder(HttpServletRequest request, String orderName,Long orderTotal,String orderInfor);
 
     List<OrderResponse> getAllOrder();
     Page<OrderResponse> getAllOrder1(int offset, int limit, String orderName,  Integer sort);

@@ -65,11 +65,11 @@ public class CartController {
     }
 
 
-    @PostMapping("/checkout1")
+        @PostMapping("/checkout1")
     @PreAuthorize("hasAnyRole('USER') OR hasAnyRole('ADMIN')")
     public ResponseEntity<?> check(HttpServletRequest request,@RequestBody OrderRequest order){
-        orderService.insertOrder(request,order.getOrderName(),order.getOrderTotal());
-        System.out.println(order.getOrderTotal());
+        orderService.insertOrder(request,order.getOrderName(),order.getOrderTotal(), order.getOrderInfor());
+        System.out.println(order.getOrderInfor());
         return new ResponseEntity(new ApiResponse(true,"Insert success"), HttpStatus.OK);
     }
 

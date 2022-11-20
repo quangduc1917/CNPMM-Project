@@ -45,4 +45,7 @@ public class Order {
     @Column(name="order_address")
     private String orderAddress;
 
+    @Column(name="order_infor")
+    private String orderInfor;
+
 }
