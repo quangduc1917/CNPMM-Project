@@ -40,7 +40,7 @@ public class OrderSeviceImpl implements OrderService {
 
 
     @Override
-    public void insertOrder(HttpServletRequest request, String orderName,Long orderTotal) {
+    public void insertOrder(HttpServletRequest request, String orderName,Long orderTotal,String orderInfor) {
         String token = JwtUtil.getToken(request);
         Long userId = jwtTokenProvider.getUserIdFromJWT(token);
         Optional<User> findUser = userRepository.findById(userId);
@@ -53,6 +53,7 @@ public class OrderSeviceImpl implements OrderService {
         order.setOrderName(orderName);
         order.setDateCreate(dateTime);
         order.setOrderAddress(findUser.get().getAddress());
+        order.setOrderInfor(orderInfor);
 
 
         emailService.sendSimpleEmail(findUser.get().getEmail(), "Đơn đặt hàng",orderName);
@@ -76,6 +77,7 @@ public class OrderSeviceImpl implements OrderService {
             String date =dateTimeFormatter.format(t.getDateCreate());
             orderResponse.setDate(date);
             orderResponse.setAddress(t.getOrderAddress());
+            orderResponse.setOrderInfor(t.getOrderInfor());
             return orderResponse;
 
         }).collect(Collectors.toList());
@@ -125,6 +127,7 @@ public class OrderSeviceImpl implements OrderService {
             orderResponse.setOrder_total(t.getOrder_total());
             orderResponse.setAddress(t.getOrderAddress());
             orderResponse.setDate(dateTimeFormatter.format(t.getDateCreate()));
+            orderResponse.setOrderInfor(t.getOrderInfor());
             return orderResponse;
         });
     }

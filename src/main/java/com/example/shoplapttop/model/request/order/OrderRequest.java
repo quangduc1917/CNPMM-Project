@@ -8,4 +8,5 @@ import lombok.Setter;
 public class OrderRequest {
     private String orderName;
     private Long orderTotal;
+    private String orderInfor;
 }

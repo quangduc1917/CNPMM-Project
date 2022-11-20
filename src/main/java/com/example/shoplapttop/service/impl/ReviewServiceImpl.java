@@ -80,6 +80,7 @@ public class ReviewServiceImpl implements ReviewService {
             ReviewResponse reviewResponse = reviewResponseMapper.to(t);
 
             reviewResponse.setUserName(t.getUserReview().getUserName());
+            reviewResponse.setStar(t.getStar());
             reviewResponse.setAvatar(t.getUserReview().getImgAvatar());
 
             return reviewResponse;

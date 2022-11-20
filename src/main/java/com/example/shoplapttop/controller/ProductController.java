@@ -33,6 +33,12 @@ public class ProductController {
         return new ResponseEntity(new ApiResponse(true, productService.insertImage(productId, files)),HttpStatus.OK);
     }
 
+    @PutMapping(value = "/api/product/uploadImage1")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> uploadFile1(@RequestParam("files") MultipartFile[] files) {
+
+        return new ResponseEntity(new ApiResponse(true, productService.insertImage1(files)),HttpStatus.OK);
+    }
     @PutMapping("/api/product/changeState")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> changeState(@RequestParam Long productId,@RequestParam Integer state) {
@@ -60,6 +66,12 @@ public class ProductController {
     }
 
 
+    @GetMapping("/api/public/product/allnew")
+    ResponseEntity<Page<ProductResponse>> getAllProductNew( @RequestParam(required = false) int offset,@RequestParam(required = false) int limit,
+                                                      @RequestParam(required = false) String keyWork, @RequestParam(required = false) Integer sort,
+                                                      @RequestParam(required = false) Long brandId){
+        return new ResponseEntity(productService.getAllProduct1(offset,limit,keyWork,keyWork,1,brandId),HttpStatus.OK);
+    }
 
 
 

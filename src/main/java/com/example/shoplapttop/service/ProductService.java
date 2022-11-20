@@ -11,7 +11,11 @@ import java.util.Optional;
 public interface ProductService {
     void insertProduct(ProductRequest productRequest);
 
+
+
     String insertImage(long productId, MultipartFile[] files);
+
+    String insertImage1(MultipartFile[] files);
 
     String changeState(Long productId, Integer state);
 
@@ -21,6 +25,7 @@ public interface ProductService {
 
     Page<ProductResponse> getAllProduct(int offset, int limit, String nameProduct, String nameBrand, Integer sort, Long brandId);
 
+    Page<ProductResponse> getAllProduct1(int offset, int limit, String nameProduct, String nameBrand, Integer sort, Long brandId);
 
 //    Optional<Product> findById(Long productId);
 }

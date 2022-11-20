@@ -23,6 +23,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -64,6 +65,34 @@ public class ProductServiceImpl implements ProductService {
         }
         return result;
     }
+
+    @Override
+    public String insertImage1(MultipartFile[] files) {
+        String result = "";
+
+        if (files.length > 4) {
+            result = "FAILED";
+        }else{
+            List<Product> l1= productRepository.findAll();
+            Product product=l1.get(l1.size()-1);
+            long productId = product.getProductId();
+            System.out.println("id"+productId);
+//            Optional<Product> findProduct = productRepository.findById(productId);
+//            findProduct.orElseThrow(()->new ResourceNotFoundException("Id not found!","ID", productId));
+//            Product product  = findProduct.get();
+            product.setImageFirst(fileStorageService.storeFile(files[0]));
+            product.setImageTwo(fileStorageService.storeFile(files[1]));
+            product.setImageThree(fileStorageService.storeFile(files[2]));
+            product.setImageFour(fileStorageService.storeFile(files[3]));
+            productRepository.save(product);
+
+            result = "SUCCESS";
+        }
+        return result;
+    }
+
+
+
 
     @Override
     public String changeState(Long productId, Integer state) {
@@ -160,6 +189,49 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+
+
+    @Override
+    public Page<ProductResponse> getAllProduct1(int offset, int limit, String nameProduct, String nameBrand, Integer sort, Long brandId) {
+        PageRequest pageRequest = PageRequest.of(offset,limit);
+
+        Page<Product> products = productRepository.findAll(new Specification<Product>() {
+            @Override
+            public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                Predicate p = criteriaBuilder.conjunction();
+                if (!nameProduct.isBlank() && !nameBrand.isBlank()){
+                    Predicate pKeyWork = criteriaBuilder.like(root.get("nameProduct"),"%"+ nameProduct +"%");
+                    Predicate pNameBrand = criteriaBuilder.like(root.join("brand").get("brandName"),"%"+nameBrand+"%");
+                    Predicate predicate = criteriaBuilder.or(pKeyWork,pNameBrand);
+                    p = criteriaBuilder.and(p,predicate);
+                }
+
+                if ( brandId != null ){
+                    Predicate pBrand = criteriaBuilder.equal(root.join("brand").get("brandId"),brandId);
+                    p = criteriaBuilder.and(p,pBrand);
+                }
+
+                if ( sort != null && sort == 0){
+                    query.orderBy(criteriaBuilder.asc(root.get("price")));
+                }
+
+                if ( sort != null && sort == 1){
+                    query.orderBy(criteriaBuilder.desc(root.get("productId")));
+                }
+
+                return p;
+            }
+        },pageRequest);
+
+
+        return products.map(t->{
+            ProductResponse productResponse = productResponseMapper.to(t);
+            productResponse.setReviewer(reviewService.countReview(t.getProductId()));
+            productResponse.setNameBrand(t.getBrand().getBrandName());
+            return productResponse;
+        });
+
+    }
 //    @Override
 //    public Optional<Product> findById(Long productId) {
 //        return productRepository.findById(productId);
